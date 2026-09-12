@@ -2,6 +2,9 @@
 
 **填写即排版，一键出成稿。** 一个离线、零依赖、单文件的简历生成器 —— 双击打开就能用，数据只待在你自己的浏览器里。
 
+> **在线试用：** https://jinasukin.github.io/resume-studio/
+> **下载单文件：** [dist/resume-studio.html](dist/resume-studio.html)（右键另存为，之后断网也能用）
+
 ```
 填写 → 实时 A4 预览 → 导出 PDF / Word / 网页
 ```
@@ -26,6 +29,10 @@
 ---
 
 ## 快速开始
+
+**方式一（最省事）**：打开 https://jinasukin.github.io/resume-studio/ ，直接用。
+
+**方式二（完全离线）**：
 
 1. 下载 `dist/resume-studio.html`
 2. **双击**，用浏览器打开（Chrome / Edge / Firefox 均可）

@@ -24,7 +24,7 @@ jobs:
       - name: 准备 Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: 内核自检
         run: node tools/selfcheck.js
