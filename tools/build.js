@@ -46,6 +46,25 @@ html = html.replace('<!DOCTYPE html>', '<!DOCTYPE html>\n' + banner);
 fs.mkdirSync(distDir, { recursive: true });
 fs.writeFileSync(outFile, html, 'utf8');
 
+/* 同时产出一个重定向入口，便于静态托管（如 GitHub Pages）根路径直达 */
+const redirect = [
+  '<!DOCTYPE html>',
+  '<html lang="zh-CN">',
+  '<head>',
+  '<meta charset="UTF-8">',
+  '<title>简历工坊 Resume Studio</title>',
+  '<meta http-equiv="refresh" content="0; url=resume-studio.html">',
+  '<link rel="canonical" href="resume-studio.html">',
+  '</head>',
+  '<body style="font-family:system-ui,sans-serif;padding:40px;color:#1f2937;line-height:1.7">',
+  '<p>正在打开「简历工坊 Resume Studio」…</p>',
+  '<p><a href="resume-studio.html">如果没有自动跳转，点这里</a></p>',
+  '</body>',
+  '</html>',
+  ''
+].join('\n');
+fs.writeFileSync(path.join(distDir, 'index.html'), redirect, 'utf8');
+
 /* ---------- 构建后校验 ---------- */
 const problems = [];
 if (/<script\s+src=/i.test(html)) problems.push('残留外链 script');
