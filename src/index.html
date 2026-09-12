@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>简历工坊 · Resume Studio</title>
+<link rel="stylesheet" href="styles/app.css">
+</head>
+<body>
+
+<div class="rs-shell">
+
+  <header class="rs-topbar">
+    <span class="rs-brand">简历工坊<span class="rs-brand-sub">Resume Studio</span></span>
+
+    <div class="rs-dd">
+      <button type="button" class="rs-btn" id="rsVersionBtn">版本：<span id="rsVersionLabel">默认版本</span> ▾</button>
+      <div class="rs-menu" id="rsVersionMenu" hidden></div>
+    </div>
+
+    <span class="rs-saved" id="rsSavedNote">已自动保存至本机</span>
+    <span class="rs-spacer"></span>
+
+    <div class="rs-tb-group">
+      <button type="button" class="rs-btn" id="rsThemeBtn">主题</button>
+      <button type="button" class="rs-btn" id="rsCheckBtn">检查</button>
+      <div class="rs-dd">
+        <button type="button" class="rs-btn rs-btn-primary" id="rsExportBtn">导出 ▾</button>
+        <div class="rs-menu" id="rsExportMenu" hidden>
+          <button type="button" data-export="pdf">PDF（浏览器打印）</button>
+          <button type="button" data-export="docx">Word 文档（.docx）</button>
+          <button type="button" data-export="html">网页文件（.html）</button>
+          <div class="rs-menu-sep"></div>
+          <button type="button" data-export="json">备份数据（.json）</button>
+        </div>
+      </div>
+      <div class="rs-dd">
+        <button type="button" class="rs-btn" id="rsMoreBtn">更多 ▾</button>
+        <div class="rs-menu" id="rsMoreMenu" hidden>
+          <button type="button" data-more="import-resume">从旧简历导入…</button>
+          <div class="rs-menu-sep"></div>
+          <button type="button" data-more="shortcut">快捷键与小贴士</button>
+          <div class="rs-menu-sep"></div>
+          <button type="button" data-more="demo">载入示例数据</button>
+          <button type="button" data-more="blank">新建空白简历</button>
+          <button type="button" data-more="import">导入数据（.json）</button>
+          <div class="rs-menu-sep"></div>
+          <button type="button" data-more="clear">清空本机数据</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="rs-main">
+    <aside class="rs-side">
+      <div class="rs-form" id="rsForm"></div>
+    </aside>
+
+    <section class="rs-preview">
+      <div class="rs-stage" id="rsStage">
+        <div class="rs-frame" id="rsFrame">
+          <div class="rs-scaler" id="rsScaler"></div>
+        </div>
+      </div>
+      <footer class="rs-statusbar">
+        <span id="rsPageInfo">正在准备预览…</span>
+        <span id="rsWarn" class="rs-warnbox rs-ok"></span>
+      </footer>
+    </section>
+  </main>
+
+</div>
+
+<div class="rs-modal" id="rsModal" hidden>
+  <div class="rs-modal-box">
+    <header>
+      <span id="rsModalTitle">标题</span>
+      <button type="button" class="rs-icon" id="rsModalClose" title="关闭">×</button>
+    </header>
+    <div class="rs-modal-body" id="rsModalBody"></div>
+  </div>
+</div>
+
+<input type="file" id="rsFileInput" accept=".json,application/json" hidden>
+<input type="file" id="rsThemeFileInput" accept=".json,application/json" hidden>
+
+<script src="styles/document.css.js"></script>
+<script src="core/tokens.js"></script>
+<script src="core/schema.js"></script>
+<script src="core/markup.js"></script>
+<script src="core/render-html.js"></script>
+<script src="core/store.js"></script>
+<script src="core/lint.js"></script>
+<script src="core/zip.js"></script>
+<script src="core/unzip.js"></script>
+<script src="core/render-docx.js"></script>
+<script src="core/parse-docx.js"></script>
+<script src="core/parse-text.js"></script>
+<script src="core/export-html.js"></script>
+<script src="core/export-pdf.js"></script>
+<script src="ui/sections.js"></script>
+<script src="ui/form.js"></script>
+<script src="ui/preview.js"></script>
+<script src="ui/toolbar.js"></script>
+<script src="ui/import.js"></script>
+<script src="ui/app.js"></script>
+
+</body>
+</html>

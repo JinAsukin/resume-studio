@@ -1,0 +1,198 @@
+{
+  "schemaVersion": "1.0",
+  "meta": {
+    "name": "林知远",
+    "nameEn": "Lin Zhiyuan",
+    "photo": "",
+    "headline": "2027 届本科应届生 · 云岭大学 社会学",
+    "facts": [
+      "20 岁",
+      "男",
+      "汉族"
+    ],
+    "contacts": [
+      {
+        "label": "电话",
+        "value": "138 0000 0000"
+      },
+      {
+        "label": "邮箱",
+        "value": "linzhiyuan@example.com"
+      },
+      {
+        "label": "GitHub",
+        "value": "github.com/example"
+      }
+    ]
+  },
+  "intent": {
+    "positions": [
+      "市场/用户研究",
+      "社会调研与项目执行",
+      "研究/运营助理"
+    ],
+    "highlights": [
+      "社会学",
+      "国家级企业调查 · 个人触达 **130+** 家",
+      "3 次田野约 **3 万字**"
+    ]
+  },
+  "summary": "社会学本科。参与 1 项国家级企业调查与 3 次区域田野调研，具备「问卷—访谈—编码—报告」全链条研究能力。熟练运用 AI agent 辅助检索、文档处理与流程自动化，执行力经实战验证。",
+  "sections": [
+    {
+      "id": "sec-mtxwjvs0-1",
+      "type": "entry",
+      "title": "教育背景",
+      "visible": true,
+      "note": "",
+      "items": [
+        {
+          "id": "item-mtxwjvs0-2",
+          "heading": "云岭大学 · 社会学（本科）",
+          "meta": "2023.09 – 2027.06",
+          "sub": "主修：社会研究方法、社会统计学、社会学概论、社会心理学、发展社会学",
+          "bullets": []
+        }
+      ]
+    },
+    {
+      "id": "sec-mtxwjvs0-3",
+      "type": "entry",
+      "title": "实习经历",
+      "visible": true,
+      "note": "",
+      "items": [
+        {
+          "id": "item-mtxwjvs0-4",
+          "heading": "某某机构 社会调查中心 · 企业调查项目 — 调查访问员",
+          "meta": "2025.07 – 2025.08",
+          "sub": "",
+          "bullets": [
+            "独立触达 **130+** 家企业，面向企业负责人与中高层开展陌生拜访，积累拒访转化与敏感问题追问经验",
+            "在企业调查高拒访背景下，参与完成小组 20 余份有效问卷",
+            "严格执行标准化访问流程：信息核验、填答引导、追问澄清、逻辑矛盾复核，保障数据真实可追溯"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-mtxwjvs0-5",
+      "type": "entry",
+      "title": "田野调研经历",
+      "visible": true,
+      "note": "三次调研累计产出调研报告约 **3 万字**（含团队与个人产出）",
+      "items": [
+        {
+          "id": "item-mtxwjvs0-6",
+          "heading": "恩施州宣恩县 · 农村发展与「贡茶产业」调研",
+          "meta": "2026.06",
+          "sub": "",
+          "bullets": [
+            "走访 **4 个乡镇**，对农户 / 合作社 / 茶企三类主体实施半结构访谈 **5 人次**，聚焦茶旅融合模式"
+          ]
+        },
+        {
+          "id": "item-mtxwjvs0-7",
+          "heading": "潜江市 · 江汉油田「油田小镇」专题调研",
+          "meta": "2026.01",
+          "sub": "",
+          "bullets": [
+            "调查资源型企业与周边社区共生关系，分析企业—地方互动机制"
+          ]
+        },
+        {
+          "id": "item-mtxwjvs0-8",
+          "heading": "黄冈市 ·「神峰山庄」新型循环农业调研",
+          "meta": "2024.12",
+          "sub": "",
+          "bullets": [
+            "梳理「种植—养殖—加工—销售」循环产业链，评估农户增收带动机制"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-mtxwjvs0-9",
+      "type": "entry",
+      "title": "项目 · 竞赛 · 在校实践",
+      "visible": true,
+      "note": "",
+      "items": [
+        {
+          "id": "item-mtxwjvs0-a",
+          "heading": "AI 智能体大赛 — **队长**",
+          "meta": "",
+          "sub": "",
+          "bullets": [
+            "带队围绕「中华民族共同体」主题搭建 RAG 知识库与 AI Agent，完成语料整理、知识库构建与问答流程设计"
+          ]
+        },
+        {
+          "id": "item-mtxwjvs0-b",
+          "heading": "全国大学生电子商务「三创赛」· 二手交易平台项目 — **队长**",
+          "meta": "2024.12 – 2025.03",
+          "sub": "",
+          "bullets": [
+            "带队 **5 人** 完成市场调研、商业模式设计与商业计划书撰写；独立完成路演答辩"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-mtxwjvs0-c",
+      "type": "kv",
+      "title": "专业技能",
+      "visible": true,
+      "note": "",
+      "pairs": [
+        {
+          "key": "研究方法",
+          "value": "问卷设计、半结构化访谈、实地调查、定性编码与主题归纳、文献综述"
+        },
+        {
+          "key": "数据与分析",
+          "value": "Excel、问卷星、SPSS（数据清洗与基础统计分析）"
+        },
+        {
+          "key": "AI 工具",
+          "value": "Agent 工作流、RAG 知识库搭建、文档与流程自动化"
+        },
+        {
+          "key": "语言 / 办公",
+          "value": "CET-4；Word 长报告、PPT 汇报"
+        }
+      ]
+    },
+    {
+      "id": "sec-mtxwjvs0-d",
+      "type": "list",
+      "title": "可提供的证明材料",
+      "visible": false,
+      "bullets": [
+        "企业调查项目实习证明（原件随身携带，被问再给）",
+        "GitHub 开源项目代码与 README"
+      ],
+      "note": ""
+    }
+  ],
+  "theme": {
+    "name": "classic-blue",
+    "tokens": {}
+  },
+  "versions": [
+    {
+      "name": "通吃版",
+      "overrides": {}
+    },
+    {
+      "name": "AI 方向版",
+      "overrides": {
+        "intent.positions": [
+          "产品运营",
+          "AI 应用助理",
+          "用户研究"
+        ]
+      }
+    }
+  ]
+}

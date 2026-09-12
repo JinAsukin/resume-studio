@@ -1,0 +1,198 @@
+/**
+ * 简历工坊 Resume Studio · A4 文档样式
+ * 预览与打印共用；所有数值来自设计令牌（--rs-*），主题切换无需改此文件。
+ * 本文件同时被「导出的干净 HTML」内联使用。
+ */
+
+.doc-page {
+  box-sizing: border-box;
+  width: var(--rs-page-w);
+  min-height: var(--rs-page-h);
+  padding: var(--rs-pad-top) var(--rs-pad-x) var(--rs-pad-bottom);
+  background: #ffffff;
+  color: var(--rs-text-body);
+  font-family: var(--rs-font);
+  font-size: var(--rs-fs-body);
+  line-height: var(--rs-lh);
+  position: relative;
+  overflow-wrap: break-word;
+}
+
+.doc-page * { box-sizing: border-box; }
+
+/* ---------- 页眉 ---------- */
+.doc-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 2px solid var(--rs-accent);
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.doc-photo {
+  width: var(--rs-photo-w);
+  height: var(--rs-photo-h);
+  object-fit: cover;
+  border: 1px solid #d1d5db;
+  border-radius: 3px;
+  flex: 0 0 auto;
+  align-self: center;
+  background: #f3f4f6;
+}
+
+.doc-who { flex: 1 1 auto; min-width: 0; }
+
+.doc-name {
+  margin: 0 0 2px;
+  font-size: var(--rs-fs-name);
+  color: var(--rs-accent);
+  letter-spacing: 4px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.doc-name-en {
+  font-size: var(--rs-fs-note);
+  color: var(--rs-text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 3px;
+}
+
+.doc-sub {
+  color: var(--rs-text-sub);
+  font-size: var(--rs-fs-sub);
+  margin-bottom: 3px;
+}
+
+.doc-contact {
+  color: var(--rs-text-sub);
+  font-size: var(--rs-fs-contact);
+}
+
+.doc-contact span { margin-right: 12px; display: inline-block; }
+
+/* ---------- 意向与标签行 ---------- */
+.doc-intent {
+  background: var(--rs-accent-soft);
+  border-left: 3px solid var(--rs-accent);
+  padding: 5px 11px;
+  margin-bottom: 8px;
+  font-size: var(--rs-fs-intent);
+  color: var(--rs-accent);
+  font-weight: 600;
+}
+
+.doc-tags {
+  background: var(--rs-tag-soft);
+  border-left: 3px solid var(--rs-tag-soft);
+  padding: 5px 11px;
+  margin-bottom: 8px;
+  font-size: var(--rs-fs-contact);
+  color: var(--rs-text-sub);
+}
+
+.doc-tag-sep { margin: 0 6px; color: var(--rs-text-muted); }
+
+/* ---------- 个人简介 ---------- */
+.doc-summary {
+  font-size: var(--rs-fs-body);
+  color: var(--rs-text-sub);
+  margin-bottom: 8px;
+  line-height: 1.55;
+}
+
+/* ---------- 板块 ---------- */
+.doc-section { margin-bottom: var(--rs-gap-section); }
+
+.doc-h2 {
+  font-size: var(--rs-fs-section);
+  color: var(--rs-accent);
+  border-left: 4px solid var(--rs-accent);
+  padding-left: 8px;
+  margin: 9px 0 3px;
+  letter-spacing: 1.2px;
+  font-weight: 700;
+}
+
+.doc-note {
+  font-size: var(--rs-fs-note);
+  color: var(--rs-text-muted);
+  font-style: italic;
+  margin: 2px 0 3px;
+  line-height: 1.4;
+}
+
+/* ---------- 条目型 ---------- */
+.doc-item { margin-bottom: 5px; }
+
+.doc-item-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-weight: 600;
+  color: var(--rs-text-strong);
+  font-size: var(--rs-fs-item);
+  gap: 10px;
+}
+
+.doc-item-meta {
+  color: var(--rs-text-meta);
+  font-weight: 400;
+  font-size: var(--rs-fs-note);
+  white-space: nowrap;
+  flex: 0 0 auto;
+}
+
+.doc-item-sub {
+  color: var(--rs-text-muted);
+  font-size: var(--rs-fs-note);
+  margin: 1px 0 2px;
+}
+
+/* ---------- 列表 ---------- */
+.doc-bullets { margin: 2px 0 0 17px; padding: 0; }
+
+.doc-bullets li {
+  margin-bottom: 1px;
+  color: var(--rs-text-body);
+  font-size: var(--rs-fs-bullet);
+  line-height: 1.45;
+}
+
+/* ---------- 键值型 ---------- */
+.doc-kv { margin: 2px 0 0 17px; padding: 0; }
+
+.doc-kv li {
+  margin-bottom: 1px;
+  font-size: var(--rs-fs-bullet);
+  color: var(--rs-text-body);
+  line-height: 1.45;
+}
+
+.doc-kv-k { color: var(--rs-accent); font-weight: 600; }
+
+/* ---------- 纯文本 ---------- */
+.doc-text {
+  font-size: var(--rs-fs-bullet);
+  color: var(--rs-text-body);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+/* ---------- 打印 ---------- */
+@page { size: A4; margin: 0; }
+
+@media print {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+  }
+  .doc-page {
+    width: var(--rs-page-w) !important;
+    min-height: 0 !important;
+    padding: var(--rs-pad-top) var(--rs-pad-x) var(--rs-pad-bottom) !important;
+  }
+  .doc-bullets li, .doc-kv li, .doc-item, .doc-section { break-inside: avoid; }
+}
