@@ -1,0 +1,55 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 准备 Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 内核自检
+        run: node tools/selfcheck.js
+
+      - name: 构建单文件产物
+        run: node tools/build.js
+
+      - name: 产物校验
+        run: node tools/verify-build.js
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 上传产物
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 部署到 Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
