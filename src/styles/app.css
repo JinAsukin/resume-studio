@@ -387,6 +387,32 @@ html, body {
 .rs-tfield input[type="range"] { flex: 1 1 auto; accent-color: var(--rs-ui-accent); }
 .rs-tfield .rs-select { flex: 1 1 auto; }
 
+/* ---------- 分级字号 ---------- */
+.rs-fslist { display: flex; flex-direction: column; gap: 7px; margin-bottom: 7px; }
+.rs-fsrow { display: flex; align-items: center; gap: 10px; }
+.rs-fsrow > label {
+  flex: 0 0 76px;
+  font-size: 12.5px;
+  color: var(--rs-ui-muted);
+  cursor: help;
+  border-bottom: 1px dotted var(--rs-ui-line-strong);
+}
+.rs-fsrow input[type="range"] { flex: 1 1 auto; accent-color: var(--rs-ui-accent); min-width: 0; }
+.rs-fsval {
+  flex: 0 0 54px;
+  text-align: right;
+  font-size: 11.5px;
+  color: var(--rs-ui-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.rs-fshint {
+  font-size: 11.5px;
+  color: var(--rs-ui-faint);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
 .rs-issuelist { list-style: none; margin: 0; padding: 0; }
 .rs-issue { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; font-size: 12.5px; }
 .rs-issue-code { font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 4px; background: rgba(255,255,255,.6); flex: 0 0 auto; }

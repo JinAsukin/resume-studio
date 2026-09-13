@@ -87,6 +87,37 @@
   }
 
   /* ---------- 主题 ---------- */
+  /** 分级字号区块：每一层一个滑块，右侧实时显示落地的 px */
+  function fmtPx(v) { return (Math.round(Number(v) * 10) / 10) + ' px'; }
+
+  function fsBlock(t) {
+    var out = [];
+    out.push('<div class="rs-subhead">分级字号（每一层可单独调整）</div>');
+    out.push('<div class="rs-fslist">');
+    RS.tokens.FS_GROUP_KEYS.forEach(function (g) {
+      var grp = RS.tokens.FS_GROUPS[g];
+      var v = (t.fsScale && t.fsScale[g]) || 1;
+      out.push('<div class="rs-fsrow" data-fsrow="' + g + '">' +
+        '<label title="' + esc(grp.hint) + '">' + esc(grp.label) + '</label>' +
+        '<input type="range" data-fs="' + g + '" min="0.7" max="1.45" step="0.02" value="' + v + '">' +
+        '<span class="rs-fsval">' + fmtPx(t[grp.primary]) + '</span>' +
+        '</div>');
+    });
+    out.push('</div>');
+    out.push('<div class="rs-fshint">每级倍率与上方「整体字号」相乘；网页预览与导出的 Word 会同步变化</div>');
+    return out.join('');
+  }
+
+  function refreshFsLabels() {
+    if (!els.modalBody) return;
+    var t = RS.tokens.resolve(RS.store.raw().theme);
+    Array.prototype.forEach.call(els.modalBody.querySelectorAll('.rs-fsrow'), function (row) {
+      var grp = RS.tokens.FS_GROUPS[row.getAttribute('data-fsrow')];
+      var cell = row.querySelector('.rs-fsval');
+      if (grp && cell) cell.textContent = fmtPx(t[grp.primary]);
+    });
+  }
+
   function openThemePanel() {
     var t = RS.tokens.resolve(currentData.theme);
     var fonts = [
@@ -99,9 +130,10 @@
     b.push('<div class="rs-tfield"><label>主题主色</label>' +
       '<input type="color" id="rsAccent" value="' + esc(t.accent) + '">' +
       '<span class="rs-hint">影响标题、强调与分隔线</span></div>');
-    b.push('<div class="rs-tfield"><label>整体字号</label>' +
+    b.push('<div class="rs-tfield"><label title="统一缩放全部字号">整体字号</label>' +
       '<input type="range" id="rsScale" min="0.88" max="1.14" step="0.01" value="' + esc(t.fontScale) + '">' +
       '<span class="rs-hint" id="rsScaleVal">' + Math.round(t.fontScale * 100) + '%</span></div>');
+    b.push(fsBlock(t));
     b.push('<div class="rs-tfield"><label>正文字体</label>' +
       '<select class="rs-select" id="rsFont">' +
       fonts.map(function (f) { return '<option value="' + esc(f.v) + '"' + (f.v === t.fontFamily ? ' selected' : '') + '>' + esc(f.l) + '</option>'; }).join('') +
@@ -114,7 +146,8 @@
       }).join('') +
       '</select></div>');
     b.push('<div class="rs-modal-actions">' +
-      '<button class="rs-btn" id="rsThemeReset">恢复默认</button>' +
+      '<button class="rs-btn" id="rsFsReset">重置分级字号</button>' +
+      '<button class="rs-btn" id="rsThemeReset">恢复默认主题</button>' +
       '<button class="rs-btn" id="rsThemeExport">导出主题</button>' +
       '<button class="rs-btn" id="rsThemeImport">导入主题</button>' +
       '</div>');
@@ -302,6 +335,10 @@
         openVersionManager();
       } else if (b.dataset.verAct === 'new' || b.dataset.verAct === 'new2') {
         RS.store.addVersion(); openVersionManager();
+      } else if (b.id === 'rsFsReset') {
+        RS.store.mutate(function (d) { d.theme.tokens.fsScale = {}; });
+        openThemePanel();
+        toast('已重置分级字号');
       } else if (b.id === 'rsThemeReset') {
         RS.store.mutate(function (d) { d.theme.tokens = {}; });
         openThemePanel(); toast('已恢复默认主题');
@@ -321,6 +358,16 @@
         RS.store.mutate(function (d) { d.theme.tokens.fontScale = Number(el.value); });
         var sv = document.getElementById('rsScaleVal');
         if (sv) sv.textContent = Math.round(Number(el.value) * 100) + '%';
+        /* 整体缩放会连带影响各级的落地 px，标签要一起刷 */
+        refreshFsLabels();
+      } else if (el.dataset && el.dataset.fs) {
+        var g = el.dataset.fs;
+        var fv = Number(el.value);
+        RS.store.mutate(function (d) {
+          if (!d.theme.tokens.fsScale) d.theme.tokens.fsScale = {};
+          d.theme.tokens.fsScale[g] = fv;
+        });
+        refreshFsLabels();
       } else if (el.dataset && el.dataset.verName !== undefined) {
         RS.store.renameVersion(Number(el.dataset.verName), el.value);
       }

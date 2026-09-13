@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   简历工坊 Resume Studio · 单文件构建产物
-  生成时间：2026-09-12T05:25:40.648Z
+  生成时间：2026-09-13T10:15:10.651Z
   由 tools/build.js 从 src/ 内联打包，请勿直接编辑本文件。
   数据只保存在你自己的浏览器里，本文件不含任何网络请求。
 -->
@@ -400,6 +400,32 @@ html, body {
 .rs-tfield input[type="range"] { flex: 1 1 auto; accent-color: var(--rs-ui-accent); }
 .rs-tfield .rs-select { flex: 1 1 auto; }
 
+/* ---------- 分级字号 ---------- */
+.rs-fslist { display: flex; flex-direction: column; gap: 7px; margin-bottom: 7px; }
+.rs-fsrow { display: flex; align-items: center; gap: 10px; }
+.rs-fsrow > label {
+  flex: 0 0 76px;
+  font-size: 12.5px;
+  color: var(--rs-ui-muted);
+  cursor: help;
+  border-bottom: 1px dotted var(--rs-ui-line-strong);
+}
+.rs-fsrow input[type="range"] { flex: 1 1 auto; accent-color: var(--rs-ui-accent); min-width: 0; }
+.rs-fsval {
+  flex: 0 0 54px;
+  text-align: right;
+  font-size: 11.5px;
+  color: var(--rs-ui-faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.rs-fshint {
+  font-size: 11.5px;
+  color: var(--rs-ui-faint);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
 .rs-issuelist { list-style: none; margin: 0; padding: 0; }
 .rs-issue { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border-radius: 6px; margin-bottom: 6px; font-size: 12.5px; }
 .rs-issue-code { font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 4px; background: rgba(255,255,255,.6); flex: 0 0 auto; }
@@ -650,6 +676,8 @@ html, body {
     fontFamily: '"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans CN",sans-serif',
     /* 整体字号缩放（主题可调，1 = 原始大小） */
     fontScale: 1,
+    /* 分级字号倍率（主题可调；1 = 原始大小）。详见 FS_GROUPS */
+    fsScale: { name: 1, head: 1, section: 1, item: 1, body: 1, note: 1 },
     /* DOCX 专用 */
     docxFont: 'Microsoft YaHei',
     docxMarginTop: 900,
@@ -668,30 +696,86 @@ html, body {
     docxFsNote: 20
   };
 
-  var FS_KEYS = ['fsName', 'fsSub', 'fsContact', 'fsIntent', 'fsSection', 'fsItem', 'fsBody', 'fsBullet', 'fsNote'];
-  var DOCX_FS_KEYS = ['docxFsName', 'docxFsSub', 'docxFsContact', 'docxFsSection', 'docxFsItem', 'docxFsBullet', 'docxFsNote'];
+  /* ---------- 字号分级 ----------
+   * 每一级是「一组语义相同、视觉同层」的字号令牌。
+   * theme.tokens.fsScale 里存各级倍率（1 = 原始），与整体缩放 fontScale 相乘后落到具体令牌。
+   */
+  var FS_GROUPS = {
+    name: {
+      label: '姓名', primary: 'fsName', hint: '页面最大的一行',
+      keys: ['fsName'], docx: ['docxFsName']
+    },
+    head: {
+      label: '头部信息', primary: 'fsSub', hint: '一句话定位、联系方式、意向条',
+      keys: ['fsSub', 'fsContact', 'fsIntent'], docx: ['docxFsSub', 'docxFsContact']
+    },
+    section: {
+      label: '板块标题', primary: 'fsSection', hint: '教育背景、实习经历等',
+      keys: ['fsSection'], docx: ['docxFsSection']
+    },
+    item: {
+      label: '条目标题', primary: 'fsItem', hint: '学校、单位、项目名',
+      keys: ['fsItem'], docx: ['docxFsItem']
+    },
+    body: {
+      label: '正文要点', primary: 'fsBody', hint: '简介、条目要点（最影响页数）',
+      keys: ['fsBody', 'fsBullet'], docx: ['docxFsBullet']
+    },
+    note: {
+      label: '辅助小字', primary: 'fsNote', hint: '补充说明、板块导语',
+      keys: ['fsNote'], docx: ['docxFsNote']
+    }
+  };
+  var FS_GROUP_KEYS = Object.keys(FS_GROUPS);
 
   /** 合并基础令牌与主题覆盖（过滤空值与未知键） */
   function resolve(theme) {
     var out = {};
     Object.keys(BASE).forEach(function (k) { out[k] = BASE[k]; });
-    if (theme && typeof theme === 'object') {
-      var t = theme.tokens || theme;
-      Object.keys(t || {}).forEach(function (k) {
-        var v = t[k];
+
+    var provided = (theme && typeof theme === 'object') ? (theme.tokens || theme) : null;
+    if (provided) {
+      Object.keys(provided).forEach(function (k) {
+        var v = provided[k];
         if (v === '' || v === null || v === undefined) return;
         if (!(k in BASE)) return;
+        if (k === 'fsScale') return;        /* 分级倍率单独深合并，不能整体覆盖 */
+        if (typeof v === 'object') return;
         out[k] = v;
       });
     }
     if (theme && theme.name) out.name = theme.name;
-    /* 整体字号缩放：只影响字号，不影响版式 */
+
+    /* 整体字号缩放 */
     var sc = Number(out.fontScale);
-    if (sc && sc !== 1) {
-      FS_KEYS.forEach(function (k) { out[k] = Math.round(Number(out[k]) * sc * 10) / 10; });
-      DOCX_FS_KEYS.forEach(function (k) { out[k] = Math.max(12, Math.round(Number(out[k]) * sc)); });
+    if (!isFinite(sc) || sc <= 0) sc = 1;
+    out.fontScale = sc;
+
+    /* 分级倍率：默认 1，只接受有效正数 */
+    var fs = {};
+    FS_GROUP_KEYS.forEach(function (g) { fs[g] = 1; });
+    var given = provided && provided.fsScale;
+    if (given && typeof given === 'object') {
+      Object.keys(given).forEach(function (g) {
+        if (!(g in fs)) return;
+        var v = Number(given[g]);
+        if (isFinite(v) && v > 0) fs[g] = v;
+      });
     }
-    out.fontScale = 1;
+    out.fsScale = fs;
+
+    /* 把「整体缩放 × 分级倍率」落到具体令牌上 */
+    FS_GROUP_KEYS.forEach(function (g) {
+      var total = sc * fs[g];
+      if (Math.abs(total - 1) < 0.0005) return;
+      FS_GROUPS[g].keys.forEach(function (k) {
+        out[k] = Math.round(Number(out[k]) * total * 10) / 10;
+      });
+      FS_GROUPS[g].docx.forEach(function (k) {
+        out[k] = Math.max(12, Math.round(Number(out[k]) * total));
+      });
+    });
+
     /* 照片尺寸以 HTML 端 photoW/photoH 为准，换算成 Word 的 EMU，保证两端观感一致 */
     out.docxPhotoW = pxToEmu(out.photoW);
     out.docxPhotoH = pxToEmu(out.photoH);
@@ -755,6 +839,8 @@ html, body {
   RS.tokens = {
     BASE: BASE,
     PHOTO_PRESETS: PHOTO_PRESETS,
+    FS_GROUPS: FS_GROUPS,
+    FS_GROUP_KEYS: FS_GROUP_KEYS,
     resolve: resolve,
     toCssVars: toCssVars,
     pxToHalfPoint: pxToHalfPoint,
@@ -3762,6 +3848,37 @@ html, body {
   }
 
   /* ---------- 主题 ---------- */
+  /** 分级字号区块：每一层一个滑块，右侧实时显示落地的 px */
+  function fmtPx(v) { return (Math.round(Number(v) * 10) / 10) + ' px'; }
+
+  function fsBlock(t) {
+    var out = [];
+    out.push('<div class="rs-subhead">分级字号（每一层可单独调整）</div>');
+    out.push('<div class="rs-fslist">');
+    RS.tokens.FS_GROUP_KEYS.forEach(function (g) {
+      var grp = RS.tokens.FS_GROUPS[g];
+      var v = (t.fsScale && t.fsScale[g]) || 1;
+      out.push('<div class="rs-fsrow" data-fsrow="' + g + '">' +
+        '<label title="' + esc(grp.hint) + '">' + esc(grp.label) + '</label>' +
+        '<input type="range" data-fs="' + g + '" min="0.7" max="1.45" step="0.02" value="' + v + '">' +
+        '<span class="rs-fsval">' + fmtPx(t[grp.primary]) + '</span>' +
+        '</div>');
+    });
+    out.push('</div>');
+    out.push('<div class="rs-fshint">每级倍率与上方「整体字号」相乘；网页预览与导出的 Word 会同步变化</div>');
+    return out.join('');
+  }
+
+  function refreshFsLabels() {
+    if (!els.modalBody) return;
+    var t = RS.tokens.resolve(RS.store.raw().theme);
+    Array.prototype.forEach.call(els.modalBody.querySelectorAll('.rs-fsrow'), function (row) {
+      var grp = RS.tokens.FS_GROUPS[row.getAttribute('data-fsrow')];
+      var cell = row.querySelector('.rs-fsval');
+      if (grp && cell) cell.textContent = fmtPx(t[grp.primary]);
+    });
+  }
+
   function openThemePanel() {
     var t = RS.tokens.resolve(currentData.theme);
     var fonts = [
@@ -3774,9 +3891,10 @@ html, body {
     b.push('<div class="rs-tfield"><label>主题主色</label>' +
       '<input type="color" id="rsAccent" value="' + esc(t.accent) + '">' +
       '<span class="rs-hint">影响标题、强调与分隔线</span></div>');
-    b.push('<div class="rs-tfield"><label>整体字号</label>' +
+    b.push('<div class="rs-tfield"><label title="统一缩放全部字号">整体字号</label>' +
       '<input type="range" id="rsScale" min="0.88" max="1.14" step="0.01" value="' + esc(t.fontScale) + '">' +
       '<span class="rs-hint" id="rsScaleVal">' + Math.round(t.fontScale * 100) + '%</span></div>');
+    b.push(fsBlock(t));
     b.push('<div class="rs-tfield"><label>正文字体</label>' +
       '<select class="rs-select" id="rsFont">' +
       fonts.map(function (f) { return '<option value="' + esc(f.v) + '"' + (f.v === t.fontFamily ? ' selected' : '') + '>' + esc(f.l) + '</option>'; }).join('') +
@@ -3789,7 +3907,8 @@ html, body {
       }).join('') +
       '</select></div>');
     b.push('<div class="rs-modal-actions">' +
-      '<button class="rs-btn" id="rsThemeReset">恢复默认</button>' +
+      '<button class="rs-btn" id="rsFsReset">重置分级字号</button>' +
+      '<button class="rs-btn" id="rsThemeReset">恢复默认主题</button>' +
       '<button class="rs-btn" id="rsThemeExport">导出主题</button>' +
       '<button class="rs-btn" id="rsThemeImport">导入主题</button>' +
       '</div>');
@@ -3977,6 +4096,10 @@ html, body {
         openVersionManager();
       } else if (b.dataset.verAct === 'new' || b.dataset.verAct === 'new2') {
         RS.store.addVersion(); openVersionManager();
+      } else if (b.id === 'rsFsReset') {
+        RS.store.mutate(function (d) { d.theme.tokens.fsScale = {}; });
+        openThemePanel();
+        toast('已重置分级字号');
       } else if (b.id === 'rsThemeReset') {
         RS.store.mutate(function (d) { d.theme.tokens = {}; });
         openThemePanel(); toast('已恢复默认主题');
@@ -3996,6 +4119,16 @@ html, body {
         RS.store.mutate(function (d) { d.theme.tokens.fontScale = Number(el.value); });
         var sv = document.getElementById('rsScaleVal');
         if (sv) sv.textContent = Math.round(Number(el.value) * 100) + '%';
+        /* 整体缩放会连带影响各级的落地 px，标签要一起刷 */
+        refreshFsLabels();
+      } else if (el.dataset && el.dataset.fs) {
+        var g = el.dataset.fs;
+        var fv = Number(el.value);
+        RS.store.mutate(function (d) {
+          if (!d.theme.tokens.fsScale) d.theme.tokens.fsScale = {};
+          d.theme.tokens.fsScale[g] = fv;
+        });
+        refreshFsLabels();
       } else if (el.dataset && el.dataset.verName !== undefined) {
         RS.store.renameVersion(Number(el.dataset.verName), el.value);
       }

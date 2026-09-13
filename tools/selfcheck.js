@@ -52,6 +52,27 @@ check('section 标签配对', (docHtml.match(/<section/g) || []).length === (doc
 check('article 标签配对', (docHtml.match(/<article/g) || []).length === (docHtml.match(/<\/article>/g) || []).length);
 check('令牌换算 px→半磅', RS.tokens.pxToHalfPoint(11.3) === 17);
 check('令牌换算 px→twip', RS.tokens.pxToTwip(17) === 255);
+
+/* ---------- 分级字号 ---------- */
+const tBase = RS.tokens.resolve({ name: 'classic-blue', tokens: {} });
+check('默认状态字号即基准值', tBase.fsBody === 11.3 && tBase.fsName === 25);
+
+const tBody = RS.tokens.resolve({ tokens: { fsScale: { body: 1.2 } } });
+check('放大正文生效', tBody.fsBody === Math.round(11.3 * 1.2 * 10) / 10, String(tBody.fsBody));
+check('同组令牌一起放大（要点）', tBody.fsBullet === Math.round(11.1 * 1.2 * 10) / 10, String(tBody.fsBullet));
+check('未调整的级别不受影响', tBody.fsName === 25 && tBody.fsSection === 12.5);
+check('分级与整体缩放相乘',
+  RS.tokens.resolve({ tokens: { fontScale: 1.1, fsScale: { body: 1.2 } } }).fsBody === Math.round(11.3 * 1.32 * 10) / 10);
+check('整体缩放值不再被 resolve 重置（回归）',
+  RS.tokens.resolve({ tokens: { fontScale: 1.1 } }).fontScale === 1.1);
+check('分级倍率可回读（供界面显示）',
+  RS.tokens.resolve({ tokens: { fsScale: { name: 1.1 } } }).fsScale.name === 1.1);
+check('非法分级倍率被忽略',
+  RS.tokens.resolve({ tokens: { fsScale: { name: 0 } } }).fsScale.name === 1);
+check('分级组定义完整（6 级）', RS.tokens.FS_GROUP_KEYS.length === 6);
+check('分级联动到 DOCX 字号',
+  RS.tokens.resolve({ tokens: { fsScale: { body: 1.2 } } }).docxFsBullet === Math.max(12, Math.round(22 * 1.2)));
+check('分级字号写入 CSS 变量', RS.tokens.toCssVars(tBody).indexOf('--rs-fs-body:13.6px') >= 0);
 check('内联标记纯文本化', RS.markup.toPlain('触达 **130+** 家') === '触达 130+ 家');
 check('XSS 转义生效', RS.markup.toHtml('<img src=x onerror=1>').includes('&lt;img'));
 
